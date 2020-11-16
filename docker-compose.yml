@@ -1,0 +1,27 @@
+version: '3'
+services:
+  runserver:
+    build:
+      context: ./
+    command: ./manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./testproject:/src
+    ports:
+      - 8001:8000
+  gunicorn:
+    build:
+      context: ./
+    command: gunicorn --workers 2 testproject.wsgi:application -b 0.0.0.0:8000 --access-logfile -
+    volumes:
+      - ./testproject:/src
+    ports:
+      - 8002:8000
+  uvicorn:
+    build:
+      context: ./
+    command: gunicorn --workers 2 -k uvicorn.workers.UvicornWorker testproject.asgi:application -b 0.0.0.0:8000 --access-logfile -
+    volumes:
+      - ./testproject:/src
+    ports:
+      - 8003:8000
+
