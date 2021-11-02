@@ -1,5 +1,15 @@
 version: '3'
 services:
+  proxy:
+    image: nginx
+    environment:
+      TZ: Europe/Amsterdam
+    expose:
+      - "80"
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
   runserver:
     build:
       context: ./
@@ -11,7 +21,7 @@ services:
   gunicorn:
     build:
       context: ./
-    command: gunicorn --workers 2 testproject.wsgi:application -b 0.0.0.0:8000 --access-logfile -
+    command: gunicorn --statsd-host=statsd:8125 --statsd-prefix=service.app --config /src/gunicorn_config.py --workers 2 testproject.wsgi:application -b 0.0.0.0:8000 --access-logfile -
     volumes:
       - ./testproject:/src
     ports:
@@ -24,4 +34,9 @@ services:
       - ./testproject:/src
     ports:
       - 8003:8000
-
+  statsd:
+    image: statsd/statsd
+    # image: dasch/statsd-debug  # Debug server, prints all incoming messages
+    ports:
+      # - 8125:8125/udp
+      - 8126:8126
