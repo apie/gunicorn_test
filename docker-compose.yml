@@ -35,8 +35,10 @@ services:
     ports:
       - 8003:8000
   statsd:
-    image: statsd/statsd
     # image: dasch/statsd-debug  # Debug server, prints all incoming messages
+    # image: statsd/statsd
+    image: rapidloop/statsd-vis
+    command: -statsdudp 0.0.0.0:8125 -statsdtcp 0.0.0.0:8125
     ports:
-      # - 8125:8125/udp
-      - 8126:8126
+      # - 8126:8126 # admin interface statsd
+      - 8080:8080 # web ui statsd-vis
