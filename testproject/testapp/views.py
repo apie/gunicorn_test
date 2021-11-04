@@ -14,7 +14,7 @@ def index(request):
 
 def slow(request):
     logger.error(request.headers.get('X-Vhost'))
-    r = random.randint(1,10)
+    r = random.randint(1,9)
     logger.error(r)
-    call(['sleep', f'1.{r}'])
+    call(['sleep', f'0.{r}'])
     return HttpResponse('slow done')
