@@ -21,7 +21,7 @@ services:
   gunicorn:
     build:
       context: ./
-    command: gunicorn --statsd-host=statsd:8125 --statsd-prefix=service.app --config /src/gunicorn_config.py --workers 2 testproject.wsgi:application -b 0.0.0.0:8000 --access-logfile -
+    command: gunicorn --statsd-host=statsd:8125 --statsd-prefix=service.app --config /src/gunicorn_config.py --workers 10 testproject.wsgi:application -b 0.0.0.0:8000 --access-logfile -
     volumes:
       - ./testproject:/src
     ports:
