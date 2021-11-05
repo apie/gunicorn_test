@@ -6,10 +6,18 @@ import random
 
 logger = logging.getLogger(__name__)
 
+from pymemcache.client.base import Client
+client = Client('memcached')
+
 
 def index(request):
     logger.error(request.headers.get('X-Vhost'))
-    return HttpResponse('index done')
+    busy_count = 0
+    for n in range(1, 11):
+        if client.get(f'worker_{n}_busy'):
+            busy_count += 1
+    print(busy_count)
+    return HttpResponse(f'index done. busy workers: {busy_count}')
 
 
 def slow(request):

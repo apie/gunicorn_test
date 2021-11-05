@@ -42,3 +42,5 @@ services:
     ports:
       # - 8126:8126 # admin interface statsd
       - 8080:8080 # web ui statsd-vis
+  memcached:
+    image: memcached
